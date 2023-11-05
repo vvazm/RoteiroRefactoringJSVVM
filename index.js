@@ -23,6 +23,10 @@ function gerarFaturaStr(fatura, pecas) {
     }
     return total;
   }
+  
+  function getPeca(apresentacao) {
+    return pecas[apresentacao.id];
+  }
 
   let totalFatura = 0;
   let creditos = 0;
@@ -46,6 +50,7 @@ function gerarFaturaStr(fatura, pecas) {
     faturaStr += `  ${getPeca(apre).nome}: ${formato(total / 100)} (${apre.audiencia} assentos)\n`;
     totalFatura += total;
   }
+
   faturaStr += `Valor total: ${formato(totalFatura / 100)}\n`;
   faturaStr += `Créditos acumulados: ${creditos} \n`;
   return faturaStr;
