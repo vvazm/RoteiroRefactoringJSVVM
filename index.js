@@ -1,20 +1,49 @@
 const { readFileSync } = require('fs');
 
+function calcularTotalApresentacao(apre, getPeca(apre, pecas)) {
+  let total = 0;
+  switch (getPeca(apre).tipo) {
+    case "tragedia":
+      total = 40000;
+      if (apre.audiencia > 30) {
+        total += 1000 * (apre.audiencia - 30);
+      }
+      break;
+    case "comedia":
+      total = 30000;
+      if (apre.audiencia > 20) {
+        total += 10000 + 500 * (apre.audiencia - 20);
+      }
+      total += 300 * apre.audiencia;
+      break;
+    default:
+      throw new Error(`Peça desconhecida: ${getPeca(apre).tipo}`);
+  }
+  return total;
+}
+
 function calcularTotalFatura(fatura, pecas) {
   let totalFatura = 0;
   for (let apre of fatura.apresentacoes) {
     totalFatura += calcularTotalApresentacao(apre, getPeca(apre, pecas));
   }
-  return totalFatura;
+ return totalFatura;
+}
+
+function calcularCredito(apre) {
+  let creditos = 0;
+  creditos += Math.max(apre.audiencia - 30, 0);
+  if (getPeca(apre).tipo === "comedia") 
+     creditos += Math.floor(apre.audiencia / 5);
+  return creditos;   
 }
 
 function calcularTotalCreditos(fatura) {
-  let creditos = 0;
+  let totalCreditos = 0;
+
   for (let apre of fatura.apresentacoes) {
-    creditos += Math.max(apre.audiencia - 30, 0);
-    if (getPeca(apre, pecas).tipo === "comedia") creditos += Math.floor(apre.audiencia / 5);
+    totalCreditos += calcularCredito(apre);
   }
-  return creditos;
 }
 
 function getPeca(apre, pecas) {
